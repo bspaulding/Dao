@@ -1,0 +1,10 @@
+html, body {
+  margin: 0px;
+  padding: 0px;
+
+  font-size: 1em;
+}
+
+.DaoTableView table tr td {
+  padding: 5px 10px;
+}
