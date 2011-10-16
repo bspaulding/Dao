@@ -43,6 +43,7 @@ DaoTableView = (function() {
       content.setAttribute('href', '#');
       content.setAttribute('data-DaoBoardX', x);
       content.setAttribute('data-DaoBoardY', y);
+      content.setAttribute('class', 'selectable');
       content.textContent = board_value;
       content.addEventListener('click', this.handlePositionSelected);
     } else {
