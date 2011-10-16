@@ -1,3 +1,12 @@
+// Dao.js
+// Author: Bradley J. Spaulding
+// A Dao game engine. 
+// 
+// NOTE: 
+//   All point objects are arrays of [x,y]. 
+//   However, when accessing into the board, 
+//   you must reverse index into the 2-d array.
+
 var Dao;
 Dao = (function() {
   function Dao(the_players) {
@@ -12,29 +21,59 @@ Dao = (function() {
   };
 
   Dao.prototype.directionMappings = {
-    'N': [-1, 0],
-    'E': [ 0, 1],
-    'S': [ 1, 0],
-    'W': [ 0,-1]
+    'N' : [-1, 0],
+    'NE': [-1, 1],
+    'E' : [ 0, 1],
+    'SE': [ 1, 1],
+    'S' : [ 1, 0],
+    'SW': [ 1,-1],
+    'W' : [ 0,-1],
+    'NW': [-1,-1]
   };
 
-  Dao.prototype.start = function() {
-    
+  Dao.prototype.winningPositions = (function() {
+    var positions = [];
+  
+    // Horizontal Positions
+    for ( var y = 0; y < 4; y += 1 ) {
+      positions.push([ [0,y], [1,y], [2,y], [3,y] ]);
+    }
+
+    // Vertical Positions
+    for ( var x = 0; x < 4; x += 1 ) {
+      positions.push([ [x,0], [x,1], [x,2], [x,3] ]);
+    }
+
+    // Four Corners
+    positions.push([ [0,0], [0,3], [3,0], [3,3] ]);
+
+    // 2x2 Squares
+    for ( var x = 0; x < 2; x += 1 ) {
+      for ( var y = 0; y < 2; y += 1 ) {
+        positions.push([ [x,y], [x,(y+1)], [(x+1),y], [(x+1),(y+1)] ]);
+      }
+    }
+
+    return positions;
+  }());
+
+  Dao.prototype.valueAt = function(point) {
+    return this.board[parseInt(point[1])][parseInt(point[0])];
   };
 
   Dao.prototype.canMove = function(from, to) {
-    var from_value = this.board[from[0]][from[1]];
-    var to_value = this.board[to[0]][to[1]];
-    
-    if ( from_value === 0 ) {
-      return false;
+    to[0] = parseInt(to[0]);
+    to[1] = parseInt(to[1]);
+
+    var legalMoves = this.legalMovesFromPosition(from);
+    for ( var i = 0; i < legalMoves.length; i += 1 ) {
+      var move = legalMoves[i];
+      if ( move[0] === to[0] && move[1] === to[1] ) {
+        return true;
+      }
     }
 
-    if ( to_value !== 0 ) {
-      return false;
-    }
-
-    return true;
+    return false;
   };
 
   Dao.prototype.positionsForPlayer = function(player) {
@@ -46,8 +85,8 @@ Dao = (function() {
 
     for ( var y = 0; y < 3; y += 1 ) {
       for ( var x = 0; x < 3; x += 1 ) {
-        if ( this.board[y][x] === player ) {
-          positions.push([y, x]);
+        if ( this.valueAt([x,y]) === player ) {
+          positions.push([x,y]);
         }
       }
     }
@@ -84,15 +123,13 @@ Dao = (function() {
 
   Dao.prototype.legalMoveFromPositionInDirection = function(position, direction) {
     var transform = this.directionMappings[direction];
-    var new_position = [parseInt(position[0]) + parseInt(transform[0]), parseInt(position[1]) + parseInt(transform[1])];
+    var new_position = [parseInt(position[0]) + transform[0], parseInt(position[1]) + transform[1]];
 
     if ( new_position[0] < 0 || new_position[0] > 3 || new_position[1] < 0 || new_position[1] > 3 ) {
       return false; // Off the board.
     }
 
-    console.log('new_position => ');
-    console.log(new_position);
-    var new_board_value = this.board[new_position[0]][new_position[1]];
+    var new_board_value = this.valueAt(new_position);
     if ( new_board_value !== 0 ) {
       return false; // Space taken.
     }
@@ -106,19 +143,22 @@ Dao = (function() {
   }
 
   Dao.prototype.move = function(from, to) {
-    if ( !this.canMove(from, to) )
+    if ( !this.canMove(from, to) ) {
       return false;
+    }
     
-    var new_value = this.board[from[0]][from[1]];
-    var old_value = this.board[to[0]][to[1]];
-    this.board[to[0]][to[1]] = new_value;
-    this.board[from[0]][from[1]] = old_value;
+    var new_value = this.valueAt(from);
+    var old_value = this.valueAt(to);
+    this.board[to[1]][to[0]] = new_value;
+    this.board[from[1]][from[0]] = old_value;
 
     if ( new_value === 1 ) {
       this.current_player = 2;
     } else {
       this.current_player = 1;
     }
+
+    return true;
   };
 
   return Dao;

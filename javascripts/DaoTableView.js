@@ -15,7 +15,7 @@ DaoTableView = (function() {
       var tr = document.createElement('tr');
       for( var k = 0; k < 4; k++ ) {
         var td = document.createElement('td');
-        td.appendChild(this.contentForBoardIndex(k,i));
+        td.appendChild(this.contentForBoardIndex(i,k));
         tr.appendChild(td);
       }
       table.appendChild(tr);
@@ -25,13 +25,13 @@ DaoTableView = (function() {
   };
 
   DaoTableView.prototype.contentForBoardIndex = function(x, y) {
-    var content, board_value = this.dao_game.board[x][y];
+    var content, board_value = this.dao_game.valueAt([x, y]);
 
     var isLegalMove = false;
     if ( this.legalMoves ) {
       for ( var i = 0; i < this.legalMoves.length; i += 1 ) {
         var move = this.legalMoves[i];
-        if ( move[0] === y && move[1] === x ) {
+        if ( move[0] === x && move[1] === y ) {
           console.log('Found Legal Move: (' + move[0] + ', ' + move[1] + ')');
           isLegalMove = true;
         }
@@ -56,15 +56,17 @@ DaoTableView = (function() {
   DaoTableView.prototype.handlePositionSelected = function(event) {
     var x = event.target.getAttribute('data-DaoBoardX');
     var y = event.target.getAttribute('data-DaoBoardY');
-    console.log('Selected Position: (' + x + ', ' + y + ') => ' + this.dao_game.board[x][y]);
 
     if ( 'undefined' === typeof this.from ) {
       this.from = [x, y];
       this.legalMoves = this.dao_game.legalMovesFromPosition(this.from);
     } else {
-      this.dao_game.move(this.from, [x,y]);
-      delete this.from;
-      delete this.legalMoves;
+      if ( this.dao_game.move(this.from, [x,y]) ) {
+        delete this.from;
+        delete this.legalMoves;
+      } else {
+        alert("Can't move from (" + this.from[0] + ',' + this.from[1] + ") to (" + x + ',' + y + ")");
+      }
     }
 
     this.render();
