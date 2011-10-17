@@ -9,8 +9,7 @@
 
 var Dao;
 Dao = (function() {
-  function Dao(the_players) {
-    this.players = the_players;
+  function Dao() {
     this.current_player = 1;
     this.board = [
       [1, 0, 0, 2],
@@ -118,7 +117,7 @@ Dao = (function() {
     for ( var i = 0; i < positions.length; i += 1 ) {
       var movesFromPosition = this.legalMovesFromPosition(positions[i]);
       for ( var k = 0; k < movesFromPosition.length; k += 1 ) {
-        moves.push(movesFromPosition[k]);
+        moves.push([positions[i], movesFromPosition[k]]);
       }
     }
 

@@ -10,6 +10,7 @@ DaoTableView = (function() {
     this.root = a_root_element;
     this.root.setAttribute('class', 'DaoTableView');
     this.dao_game = a_dao_game;
+    this.computer_player = new RandomPlayer(this.dao_game, 2);
     this.render();
   };
 
@@ -28,7 +29,7 @@ DaoTableView = (function() {
     this.root.appendChild(table);
 
     if ( this.game_over ) {
-      alert("Player " + this.dao_game.winning_player + " won!");
+      alert("Player " + this.dao_game.winning_player + " is the winner!");
     }
   };
 
@@ -74,6 +75,10 @@ DaoTableView = (function() {
         if ( this.dao_game.gameOver() ) {
           this.game_over = true;
         }
+
+        // Computer Player
+        var computer_move = this.computer_player.nextMove();
+        this.dao_game.move(computer_move[0], computer_move[1]);
       } else {
         alert("Can't move from (" + this.from[0] + ',' + this.from[1] + ") to (" + x + ',' + y + ")");
       }
