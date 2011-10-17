@@ -1,4 +1,4 @@
-// Dao.js
+// dao.js
 // Author: Bradley J. Spaulding
 // A Dao game engine. 
 // 

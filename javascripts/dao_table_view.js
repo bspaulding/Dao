@@ -1,4 +1,4 @@
-// DaoTableView.js
+// dao_table_view.js
 // Author: Bradley J. Spaulding
 // A simple HTML <table> view for Dao.
 
