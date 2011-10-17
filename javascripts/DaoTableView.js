@@ -1,3 +1,7 @@
+// DaoTableView.js
+// Author: Bradley J. Spaulding
+// A simple HTML <table> view for Dao.
+
 var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 var DaoTableView;
 DaoTableView = (function() {
