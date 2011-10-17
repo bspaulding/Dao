@@ -22,6 +22,10 @@ DaoTableView = (function() {
     }
     this.root.innerHTML = '';
     this.root.appendChild(table);
+
+    if ( this.game_over ) {
+      alert("Player " + this.dao_game.winning_player + " won!");
+    }
   };
 
   DaoTableView.prototype.contentForBoardIndex = function(x, y) {
@@ -32,13 +36,12 @@ DaoTableView = (function() {
       for ( var i = 0; i < this.legalMoves.length; i += 1 ) {
         var move = this.legalMoves[i];
         if ( move[0] === x && move[1] === y ) {
-          console.log('Found Legal Move: (' + move[0] + ', ' + move[1] + ')');
           isLegalMove = true;
         }
       }
     }
     
-    if ( (board_value === this.dao_game.current_player  && 'undefined' === typeof this.from) || ('undefined' !== typeof this.from && isLegalMove) ) {
+    if ( !this.game_over && (board_value === this.dao_game.current_player  && 'undefined' === typeof this.from) || ('undefined' !== typeof this.from && isLegalMove) ) {
       content = document.createElement('a');
       content.setAttribute('href', '#');
       content.setAttribute('data-DaoBoardX', x);
@@ -64,6 +67,9 @@ DaoTableView = (function() {
       if ( this.dao_game.move(this.from, [x,y]) ) {
         delete this.from;
         delete this.legalMoves;
+        if ( this.dao_game.gameOver() ) {
+          this.game_over = true;
+        }
       } else {
         alert("Can't move from (" + this.from[0] + ',' + this.from[1] + ") to (" + x + ',' + y + ")");
       }

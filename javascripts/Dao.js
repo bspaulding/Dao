@@ -62,6 +62,10 @@ Dao = (function() {
   };
 
   Dao.prototype.canMove = function(from, to) {
+    if ( this.winning_player ) {
+      return false;
+    }
+
     to[0] = parseInt(to[0]);
     to[1] = parseInt(to[1]);
 
@@ -83,8 +87,8 @@ Dao = (function() {
       return positions;
     }
 
-    for ( var y = 0; y < 3; y += 1 ) {
-      for ( var x = 0; x < 3; x += 1 ) {
+    for ( var y = 0; y < 4; y += 1 ) {
+      for ( var x = 0; x < 4; x += 1 ) {
         if ( this.valueAt([x,y]) === player ) {
           positions.push([x,y]);
         }
@@ -158,7 +162,35 @@ Dao = (function() {
       this.current_player = 1;
     }
 
+    if ( this.gameOver() ) {
+      this.winning_player = new_value;
+    }
+
     return true;
+  };
+
+  Dao.prototype.gameOver = function() {
+    for ( var i = 1; i < 3; i += 1 ) {
+      var playerPositions = this.positionsForPlayer(i); // Array of points.
+      for ( var j = 0; j < this.winningPositions.length; j += 1 ) {
+        var winningPosition = this.winningPositions[j]; // Array of points.
+        if ( playerPositions[0][0] == winningPosition[0][0] &&
+             playerPositions[0][1] == winningPosition[0][1] &&
+
+             playerPositions[1][0] == winningPosition[1][0] &&
+             playerPositions[1][1] == winningPosition[1][1] &&
+
+             playerPositions[2][0] == winningPosition[2][0] &&
+             playerPositions[2][1] == winningPosition[2][1] &&
+
+             playerPositions[3][0] == winningPosition[3][0] &&
+             playerPositions[3][1] == winningPosition[3][1] ) {
+          return true;   
+        }
+      }
+    }
+
+    return false;
   };
 
   return Dao;
