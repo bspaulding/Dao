@@ -51,11 +51,13 @@ DaoTableView = (function() {
       content.setAttribute('href', '#');
       content.setAttribute('data-DaoBoardX', x);
       content.setAttribute('data-DaoBoardY', y);
-      content.setAttribute('class', 'selectable');
+      content.setAttribute('class', 'selectable player-' + board_value);
       content.textContent = board_value;
       content.addEventListener('click', this.handlePositionSelected);
     } else {
-      content = document.createTextNode(board_value);
+      var content = document.createElement('span');
+      content.setAttribute('class', 'player-' + board_value);
+      content.appendChild(document.createTextNode(board_value));
     }
 
     return content;
