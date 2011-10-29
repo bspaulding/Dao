@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets"
+        xmlns:gap="http://phonegap.com/ns/1.0"
+        id="com.motingo.dao"
+        version="0.9.0">
+  <name>Dao</name>
+  <description>Dao is a board game.</description>
+  <author href="http://motingo.com" email="bradley.spaulding@motingo.com">
+    Bradley J. Spaulding
+  </author>
+</widget>
