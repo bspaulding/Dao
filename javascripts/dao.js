@@ -47,8 +47,8 @@ Dao = (function() {
     positions.push([ [0,0], [0,3], [3,0], [3,3] ]);
 
     // 2x2 Squares
-    for ( var x = 0; x < 2; x += 1 ) {
-      for ( var y = 0; y < 2; y += 1 ) {
+    for ( var x = 0; x < 3; x += 1 ) {
+      for ( var y = 0; y < 3; y += 1 ) {
         positions.push([ [x,y], [x,(y+1)], [(x+1),y], [(x+1),(y+1)] ]);
       }
     }
@@ -86,8 +86,8 @@ Dao = (function() {
       return positions;
     }
 
-    for ( var y = 0; y < 4; y += 1 ) {
-      for ( var x = 0; x < 4; x += 1 ) {
+    for ( var x = 0; x < 4; x += 1 ) {
+      for ( var y = 0; y < 4; y += 1 ) {
         if ( this.valueAt([x,y]) === player ) {
           positions.push([x,y]);
         }
