@@ -6,25 +6,80 @@ html, body {
 }
 
 body {
-  background-image: url('../images/wood.png');
+  background-image: url('../images/wood_iphone.png');
+  background-size: 320px 480px;
 }
 
 .DaoTableView table {
-  width: 100%;
-  height: 100%;
+  margin: 70px 0px 0px 0px;
+
+  border-collapse: collapse;
 }
 
 .DaoTableView table tr td {
-  padding: 5px 10px;
+  /*padding: 5px 10px;*/
+  width: 80px;
+  height: 80px;
+
+  /*border: 1px solid rgba(200, 187, 135, 0.7);*/
 }
 
-.DaoTableView table tr td.player-1 { background: blue; }
-.DaoTableView table tr td.player-2 { background: red; }
+.DaoTableView table tr:nth-child(odd) td:nth-child(odd),
+.DaoTableView table tr:nth-child(even) td:nth-child(even) {
+  background: rgba(200, 187, 135, 0.2);
+}
 
+/*.DaoTableView table tr td.player-1 { background: blue; }
+.DaoTableView table tr td.player-2 { background: red; }
+*/
 .DaoTableView table tr td a {
   margin: 0px auto;
   width: 100%;
   height: 100%;
   display: block;
-  background: #CCC;
+  /*background: #CCC;*/
+  background-image: url('../images/a_stone_clipped.png');
+}
+
+.DaoTableView table tr td img {
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;  
+}
+
+/* Wiggle Animation */
+@-webkit-keyframes wiggle {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(7deg);
+  }
+}
+
+.wiggle {
+  -webkit-animation-name: wiggle;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-duration: 0.1s;
+  -webkit-animation-timing-function: ease-in-out;
+}
+
+/* Landscape Tweaks */
+@media all and (orientation:landscape) {
+  body {
+    background-image: url('../images/wood_iphone_landscape.png');
+    background-size: 480px 320px;
+  }
+
+  .DaoTableView table {
+    margin: 0px auto;
+  }
+
+  .DaoTableView table tr td {
+    width: 73px;
+    height: 73px;
+  }
 }

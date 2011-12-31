@@ -7,10 +7,12 @@ var DaoTableView;
 DaoTableView = (function() {
   function DaoTableView(a_root_element, a_dao_game) {
     this.handlePositionSelected = __bind(this.handlePositionSelected, this);
+
     this.root = a_root_element;
     this.root.setAttribute('class', 'DaoTableView');
     this.dao_game = a_dao_game;
-    this.computer_player = new RandomPlayer(this.dao_game, 2);
+
+    // this.computer_player = new RandomPlayer(this.dao_game, 2);
     this.render();
   };
 
@@ -47,18 +49,45 @@ DaoTableView = (function() {
     }
     
     if ( !this.game_over && (board_value === this.dao_game.current_player  && 'undefined' === typeof this.from) || ('undefined' !== typeof this.from && isLegalMove) ) {
-      content = document.createElement('a');
-      content.setAttribute('href', '#');
-      content.setAttribute('data-DaoBoardX', x);
-      content.setAttribute('data-DaoBoardY', y);
+      content = document.createElement('img');
+      if ( board_value === 1 ) {
+        content.setAttribute('src', 'images/a_stone_clipped.png');
+      } else if ( board_value === 2 ) {
+        content.setAttribute('src', 'images/a_stone_dark_clipped.png');
+      } else { // board_value === 0
+        if ( this.dao_game.current_player === 1 ) {
+          content.setAttribute('src', 'images/a_stone_clipped.png');
+        } else {
+          content.setAttribute('src', 'images/a_stone_dark_clipped.png');
+        }
+        content.setAttribute('style', 'opacity: 0.5;')
+      }
+
       content.setAttribute('class', 'selectable player-' + board_value);
-      content.textContent = board_value;
-      content.addEventListener('click', this.handlePositionSelected);
     } else {
-      var content = document.createElement('span');
+      var content = document.createElement('img');
+      if ( board_value === 1 ) {
+        content.setAttribute('src', 'images/a_stone_clipped.png');
+      } else if ( board_value === 2 ) {
+        content.setAttribute('src', 'images/a_stone_dark_clipped.png');
+      } else {
+        content.setAttribute('src', 'images/pixel.gif');
+      }
       content.setAttribute('class', 'player-' + board_value);
-      content.appendChild(document.createTextNode(board_value));
     }
+
+    if ( this.dao_game.current_player === board_value ) {
+      content.setAttribute('class', 'wiggle');
+    }
+
+    if ( this.from && parseInt(this.from[0]) === x && parseInt(this.from[1]) === y ) {
+      content.setAttribute('class', content.getAttribute('class') + ' selected');
+    }
+
+    content.addEventListener('click', this.handlePositionSelected);
+
+    content.setAttribute('data-DaoBoardX', x);
+    content.setAttribute('data-DaoBoardY', y);
 
     return content;
   };
@@ -71,7 +100,9 @@ DaoTableView = (function() {
       this.from = [x, y];
       this.legalMoves = this.dao_game.legalMovesFromPosition(this.from);
     } else {
-      if ( this.dao_game.move(this.from, [x,y]) ) {
+      if ( this.from[0] === x && this.from[1] === y ) {
+        delete this.from;
+      } else if ( this.dao_game.move(this.from, [x,y]) ) {
         delete this.from;
         delete this.legalMoves;
         if ( this.dao_game.gameOver() ) {
@@ -79,8 +110,8 @@ DaoTableView = (function() {
         }
 
         // Computer Player
-        var computer_move = this.computer_player.nextMove();
-        this.dao_game.move(computer_move[0], computer_move[1]);
+        // var computer_move = this.computer_player.nextMove();
+        // this.dao_game.move(computer_move[0], computer_move[1]);
       } else {
         alert("Can't move from (" + this.from[0] + ',' + this.from[1] + ") to (" + x + ',' + y + ")");
       }
