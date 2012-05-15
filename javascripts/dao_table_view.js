@@ -60,10 +60,11 @@ DaoTableView = (function() {
         } else {
           content.setAttribute('src', 'images/a_stone_dark_clipped.png');
         }
-        content.setAttribute('style', 'opacity: 0.5;')
+        content.setAttribute('style', 'opacity: 0.5;');
+        content.setAttribute('class', content.getAttribute('class') + ' wiggle');
       }
 
-      content.setAttribute('class', 'selectable player-' + board_value);
+      content.setAttribute('class', content.getAttribute('class') + ' selectable player-' + board_value);
     } else {
       var content = document.createElement('img');
       if ( board_value === 1 ) {
@@ -76,7 +77,7 @@ DaoTableView = (function() {
       content.setAttribute('class', 'player-' + board_value);
     }
 
-    if ( this.dao_game.current_player === board_value ) {
+    if ( !this.from && this.dao_game.current_player === board_value ) {
       content.setAttribute('class', 'wiggle');
     }
 
@@ -107,6 +108,7 @@ DaoTableView = (function() {
         delete this.legalMoves;
         if ( this.dao_game.gameOver() ) {
           this.game_over = true;
+          this.root.setAttribute('class', this.root.getAttribute('class') + ' game-over');
         }
 
         // Computer Player
